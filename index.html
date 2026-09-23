@@ -6,7 +6,137 @@
 <title>Билет к маме Сифона 💗</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:"Trebuchet MS",Arial,sans-serif;background:radial-gradient(circle at 10% 10%,#ffe1d5,transparent 28%),radial-gradient(circle at 90% 90%,#ffdce8,transparent 30%),linear-gradient(135deg,#fff6ec,#ffe8df,#ffeaf1);color:#68463d}.page{width:min(1000px,94%);margin:auto;padding:30px 0 50px}header{text-align:center;margin-bottom:25px}.logo{font-size:52px}h1{margin:5px 0;font-size:32px}.subtitle{color:#a47468}.status{display:inline-flex;align-items:center;gap:8px;margin-top:15px;padding:8px 15px;border-radius:50px;background:#ffffffbf;font-size:13px}.dot{width:9px;height:9px;border-radius:50%;background:#72c989;box-shadow:0 0 10px #72c989}.layout{display:grid;grid-template-columns:1fr 1.3fr;gap:22px}.panel{background:#fffaf6e6;border-radius:28px;padding:25px;box-shadow:0 20px 50px #78463d21;backdrop-filter:blur(12px)}.title{font-size:19px;font-weight:bold;margin-bottom:18px}input{width:100%;padding:16px;border:2px solid #f0c8be;border-radius:16px;background:#fffaf7;font-size:16px;color:#68463d;outline:none}input:focus{border-color:#dc9187}button{width:100%;padding:17px;margin-top:12px;border:0;border-radius:17px;background:linear-gradient(135deg,#e98d83,#d66e77);color:white;font-size:17px;font-weight:bold;cursor:pointer;box-shadow:0 10px 22px #d2646440;transition:.2s}button:hover{transform:translateY(-2px)}button:disabled{opacity:.5;cursor:not-allowed;transform:none}.secondary{background:white;color:#c96f68;border:2px solid #efc5bd;box-shadow:none}.error{margin-top:12px;color:#c45c59;font-size:14px}.ticket{margin-top:20px;padding:28px 20px;text-align:center;background:linear-gradient(135deg,#fffdfb,#fff0eb);border:2px dashed #dfa095;border-radius:24px}.ticket-label{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#aa7c72}.ticket-name{margin-top:10px;font-size:19px;font-weight:bold}.number{margin:10px 0;font-size:64px;font-weight:bold;color:#d66f68}.time{color:#a77d73;font-size:13px}.hidden{display:none}.row{display:grid;grid-template-columns:60px 1fr 100px;align-items:center;padding:12px 10px;margin-bottom:7px;background:#fff8f4;border-radius:14px}.row-number{font-weight:bold;color:#d47169}.row-name{font-weight:bold}.row-time{text-align:right;color:#a98177;font-size:12px}.empty{padding:30px;text-align:center;color:#ae8980}.count{margin-top:15px;text-align:center;font-size:13px;color:#a98177}@media(max-width:700px){.layout{grid-template-columns:1fr}h1{font-size:27px}.row{grid-template-columns:50px 1fr 75px}.number{font-size:52px}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;font-family:"Trebuchet MS",Arial,sans-serif;background:radial-gradient(circle at 10% 10%,#ffe1d5,transparent 28%),radial-gradient(circle at 90% 90%,#ffdce8,transparent 30%),linear-gradient(135deg,#fff6ec,#ffe8df,#ffeaf1);color:#68463d;overflow-x:hidden}
+button,input{font-family:inherit}
+.page{width:min(1000px,94%);margin:auto;padding:30px 0 65px}
+header{text-align:center;margin-bottom:25px}
+.logo{font-size:52px}
+h1{margin:5px 0;font-size:32px}
+.subtitle{color:#a47468}
+.status{display:inline-flex;align-items:center;gap:8px;margin-top:15px;padding:8px 15px;border-radius:50px;background:#ffffffbf;font-size:13px}
+.dot{width:9px;height:9px;border-radius:50%;background:#72c989;box-shadow:0 0 10px #72c989}
+.layout{display:grid;grid-template-columns:1fr 1.3fr;gap:22px;position:relative;z-index:2}
+.panel{background:#fffaf6e6;border-radius:28px;padding:25px;box-shadow:0 20px 50px #78463d21;backdrop-filter:blur(12px)}
+.title{font-size:19px;font-weight:bold;margin-bottom:18px}
+input{width:100%;padding:16px;border:2px solid #f0c8be;border-radius:16px;background:#fffaf7;font-size:16px;color:#68463d;outline:none}
+input:focus{border-color:#dc9187}
+button{width:100%;padding:17px;margin-top:12px;border:0;border-radius:17px;background:linear-gradient(135deg,#e98d83,#d66e77);color:white;font-size:17px;font-weight:bold;cursor:pointer;box-shadow:0 10px 22px #d2646440;transition:.2s}
+button:hover{transform:translateY(-2px)}
+button:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.secondary{background:white;color:#c96f68;border:2px solid #efc5bd;box-shadow:none}
+.error{margin-top:12px;color:#c45c59;font-size:14px}
+.ticket{margin-top:20px;padding:28px 20px;text-align:center;background:linear-gradient(135deg,#fffdfb,#fff0eb);border:2px dashed #dfa095;border-radius:24px;position:relative}
+.ticket-label{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#aa7c72}
+.ticket-name{margin-top:10px;font-size:19px;font-weight:bold}
+.number{margin:10px 0;font-size:64px;font-weight:bold;color:#d66f68}
+.time{color:#a77d73;font-size:13px}
+.hidden{display:none}
+.row{display:grid;grid-template-columns:60px 1fr 100px;align-items:center;padding:12px 10px;margin-bottom:7px;background:#fff8f4;border-radius:14px}
+.row-number{font-weight:bold;color:#d47169}
+.row-name{font-weight:bold}
+.row-time{text-align:right;color:#a98177;font-size:12px}
+.empty{padding:30px;text-align:center;color:#ae8980}
+.count{margin-top:15px;text-align:center;font-size:13px;color:#a98177}
+
+/* ===== КРОЛИКИ ===== */
+.rabbit-stage{height:70px;position:relative;z-index:5;pointer-events:none;margin:0 18px -18px}
+.rabbit{position:absolute;bottom:-3px;font-size:48px;line-height:1;cursor:pointer;pointer-events:auto;filter:drop-shadow(0 5px 4px rgba(90,48,38,.18));user-select:none;transition:transform .2s}
+.rabbit.left{left:12%}
+.rabbit.right{right:12%}
+.rabbit:hover{transform:translateY(-8px) rotate(-5deg)}
+.rabbit.jump-left{animation:rabbitJumpLeft .95s cubic-bezier(.2,.8,.2,1) forwards}
+.rabbit.jump-right{animation:rabbitJumpRight .95s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes rabbitJumpLeft{
+0%{transform:translate(0,0) rotate(0) scale(1);opacity:1}
+25%{transform:translate(-15px,-48px) rotate(-12deg) scale(1.08)}
+60%{transform:translate(85px,-95px) rotate(20deg) scale(.9)}
+100%{transform:translate(170px,55px) rotate(35deg) scale(.08);opacity:0}
+}
+@keyframes rabbitJumpRight{
+0%{transform:translate(0,0) rotate(0) scale(1);opacity:1}
+25%{transform:translate(15px,-48px) rotate(12deg) scale(1.08)}
+60%{transform:translate(-85px,-95px) rotate(-20deg) scale(.9)}
+100%{transform:translate(-170px,55px) rotate(-35deg) scale(.08);opacity:0}
+}
+
+/* ===== АРХИВ СИФОНА ===== */
+.siphon-section{margin-top:55px;position:relative}
+.siphon-head{text-align:center;margin-bottom:25px}
+.siphon-head h2{font-size:clamp(27px,5vw,40px);margin:0 0 7px}
+.siphon-head p{margin:0;color:#a47468}
+.siphon-feature{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:stretch}
+.siphon-card,.water-card{background:#fffaf6e8;border:1px solid #ffffffaa;border-radius:30px;padding:18px;box-shadow:0 20px 50px #78463d1c;backdrop-filter:blur(12px)}
+.main-photo-wrap{position:relative;overflow:hidden;border-radius:22px;cursor:pointer}
+.main-photo{width:100%;height:390px;display:block;object-fit:cover;transition:transform .5s}
+.main-photo-wrap:hover .main-photo{transform:scale(1.025)}
+.photo-shine{position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,#ffffff38 50%,transparent 65%);transform:translateX(-120%);pointer-events:none}
+.main-photo-wrap:hover .photo-shine{animation:shine 1.1s ease}
+@keyframes shine{to{transform:translateX(120%)}}
+.photo-label{padding:13px 4px 3px;text-align:center;font-weight:bold;color:#7c554b}
+.water-card{display:flex;flex-direction:column;justify-content:center;text-align:center;min-height:450px}
+.water-card h3{font-size:25px;margin:0 0 8px}
+.water-card p{color:#a47468;margin:0 0 15px}
+.siphon-button{width:auto;display:inline-block;padding:14px 22px;margin:0 auto;background:linear-gradient(135deg,#e98d83,#d66e77)}
+.water-machine{height:175px;position:relative;margin:12px auto 0;width:170px}
+.water-stream{position:absolute;left:50%;top:6px;transform:translateX(-50%) scaleY(0);transform-origin:top;width:22px;height:125px;border-radius:30px;background:linear-gradient(to right,#8ed8f5,#42aee2,#9de2f7);opacity:0}
+.water-machine.on .water-stream{opacity:.9;animation:waterStream .7s ease-in-out infinite alternate}
+@keyframes waterStream{from{transform:translateX(-50%) scaleY(.65)}to{transform:translateX(-50%) scaleY(1)}}
+.water-splash{position:absolute;left:50%;top:122px;width:120px;height:35px;transform:translateX(-50%) scale(.2);opacity:0;border:5px solid #6bc4eb;border-top-color:transparent;border-left-color:transparent;border-right-color:transparent;border-radius:50%}
+.water-machine.on .water-splash{opacity:.8;animation:splash .7s ease-in-out infinite alternate}
+@keyframes splash{to{transform:translateX(-50%) scale(1)}}
+.drop{position:absolute;width:9px;height:15px;border-radius:70% 30% 60% 40%;background:#62bee8;opacity:0}
+.water-machine.on .drop{opacity:.9;animation:drop 1s linear infinite}
+.drop.d1{left:35%;animation-delay:.1s}.drop.d2{left:62%;animation-delay:.4s}.drop.d3{left:47%;animation-delay:.7s}
+@keyframes drop{0%{top:40px;transform:scale(.5)}80%{opacity:.8}100%{top:145px;transform:scale(1);opacity:0}}
+.water-note{font-size:13px;color:#a98177;margin-top:5px}
+
+/* ===== ГАЛЕРЕЯ ===== */
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:22px}
+.gallery-item{background:#fffaf6e8;border-radius:22px;padding:8px;border:1px solid #ffffffaa;box-shadow:0 12px 30px #78463d17;cursor:pointer;transition:.25s}
+.gallery-item:hover{transform:translateY(-5px) rotate(.25deg);box-shadow:0 18px 35px #78463d26}
+.gallery-item img{width:100%;height:235px;object-fit:cover;display:block;border-radius:16px}
+.gallery-caption{text-align:center;padding:10px 4px 7px;font-size:13px;font-weight:bold;color:#7c554b}
+.gallery-item:first-child{grid-column:span 2}
+.gallery-item:first-child img{height:360px}
+
+/* ===== ЛАЙТБОКС ===== */
+.lightbox{position:fixed;inset:0;background:#2c1b18d9;display:none;align-items:center;justify-content:center;padding:20px;z-index:10000;backdrop-filter:blur(8px)}
+.lightbox.open{display:flex}
+.lightbox img{max-width:94vw;max-height:88vh;border-radius:20px;box-shadow:0 25px 80px #0008;object-fit:contain}
+.lightbox-close{position:fixed;right:22px;top:12px;color:#fff;font-size:42px;cursor:pointer;line-height:1}
+.lightbox-hint{position:fixed;bottom:18px;color:#fff9;font-size:13px}
+
+/* ===== МОБИЛЬНАЯ ВЕРСИЯ ===== */
+@media(max-width:800px){
+ .layout{grid-template-columns:1fr}
+ .siphon-feature{grid-template-columns:1fr}
+ .water-card{min-height:300px}
+ .main-photo{height:350px}
+ .gallery{grid-template-columns:1fr 1fr}
+ .gallery-item:first-child{grid-column:span 2}
+ .gallery-item:first-child img{height:270px}
+ .gallery-item img{height:210px}
+}
+@media(max-width:520px){
+ .page{padding-top:20px}
+ h1{font-size:27px}
+ .logo{font-size:44px}
+ .panel{padding:19px}
+ .number{font-size:52px}
+ .row{grid-template-columns:50px 1fr 72px}
+ .rabbit{font-size:40px}
+ .rabbit.left{left:4%}.rabbit.right{right:4%}
+ .gallery{grid-template-columns:1fr}
+ .gallery-item:first-child{grid-column:auto}
+ .gallery-item:first-child img,.gallery-item img{height:290px}
+ .main-photo{height:330px}
+}
+
+/* Появление блока при прокрутке */
+.reveal{opacity:0;transform:translateY(25px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
 </style>
 </head>
 <body>
@@ -17,6 +147,13 @@
 <div class="subtitle">Получи свой номер и дождись своей очереди 💗</div>
 <div class="status"><span class="dot"></span> Очередь работает</div>
 </header>
+
+<!-- Кролики сидят на границе панели -->
+<div class="rabbit-stage" aria-label="Интерактивные кролики">
+  <div class="rabbit left" title="Нажми на кролика">🐇</div>
+  <div class="rabbit right" title="Нажми на кролика">🐰</div>
+</div>
+
 <div class="layout">
 <section class="panel">
 <div class="title">💌 Получить билет</div>
@@ -35,13 +172,80 @@
 <button class="secondary" onclick="downloadTicket()">📥 Скачать билет</button>
 </div>
 </section>
+
 <section class="panel">
 <div class="title">👥 Живая очередь</div>
 <div id="queue"><div class="empty">Загружаем очередь...</div></div>
 <div class="count">Всего билетов: <b id="count">0</b></div>
 </section>
 </div>
+
+<!-- НОВЫЙ БЛОК СИФОНА -->
+<section class="siphon-section reveal" id="siphonArchive">
+  <div class="siphon-head">
+    <h2>📸 Архив Сифона</h2>
+    <p>Немного документальных материалов о человеке, ради которого существует эта очередь.</p>
+  </div>
+
+  <div class="siphon-feature">
+    <div class="siphon-card">
+      <div class="main-photo-wrap" data-photo="images/siphon-1.jpg">
+        <img class="main-photo" src="images/siphon-1.jpg" alt="Сифон" loading="lazy">
+        <div class="photo-shine"></div>
+      </div>
+      <div class="photo-label">Сифон в пути 🚌</div>
+    </div>
+
+    <div class="water-card">
+      <h3>💦 Водный режим Сифона</h3>
+      <p>Нажми кнопку. Сифон активирует водоснабжение.</p>
+      <button class="siphon-button" id="waterButton" type="button">Включить воду 💦</button>
+      <div class="water-machine" id="waterMachine">
+        <div class="water-stream"></div>
+        <div class="water-splash"></div>
+        <i class="drop d1"></i><i class="drop d2"></i><i class="drop d3"></i>
+      </div>
+      <div class="water-note" id="waterNote">Система готова.</div>
+    </div>
+  </div>
+
+  <div class="gallery">
+    <div class="gallery-item" data-photo="images/siphon-2.png">
+      <img src="images/siphon-2.png" alt="Сифон — SWAG" loading="lazy">
+      <div class="gallery-caption">SWAG 100% 😎</div>
+    </div>
+    <div class="gallery-item" data-photo="images/siphon-3.jpg">
+      <img src="images/siphon-3.jpg" alt="Сифон" loading="lazy">
+      <div class="gallery-caption">Спокойный Сифон</div>
+    </div>
+    <div class="gallery-item" data-photo="images/siphon-4.jpg">
+      <img src="images/siphon-4.jpg" alt="Сифон на занятиях" loading="lazy">
+      <div class="gallery-caption">Учёба победила</div>
+    </div>
+    <div class="gallery-item" data-photo="images/siphon-5.jpg">
+      <img src="images/siphon-5.jpg" alt="Сифон у зеркала" loading="lazy">
+      <div class="gallery-caption">Фирменный образ</div>
+    </div>
+    <div class="gallery-item" data-photo="images/siphon-6.jpg">
+      <img src="images/siphon-6.jpg" alt="Сифон с братом" loading="lazy">
+      <div class="gallery-caption">С братаном 🤝</div>
+    </div>
+    <div class="gallery-item" data-photo="images/siphon-7.jpg">
+      <img src="images/siphon-7.jpg" alt="Сифон — крупный план" loading="lazy">
+      <div class="gallery-caption">Редкий крупный план</div>
+    </div>
+  </div>
+</section>
+
 </div>
+
+<!-- Окно увеличения фотографий -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lightbox-close" id="lightboxClose">&times;</div>
+  <img id="lightboxImg" src="" alt="">
+  <div class="lightbox-hint">Нажми в сторону или Esc, чтобы закрыть</div>
+</div>
+
 <script>
 const SUPABASE_URL="https://amtfqxrqvtadjmqdfhrf.supabase.co";
 const SUPABASE_KEY="sb_publishable_RicXtLtPzYwf3oSK_gnidw_Y10JbDwI";
@@ -109,6 +313,61 @@ function formatTime(date){return new Date(date).toLocaleTimeString("ru-RU",{hour
 function showError(message){document.getElementById("error").textContent=message}
 function escapeHtml(text){const div=document.createElement("div");div.textContent=text;return div.innerHTML}
 function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath()}
+
+/* ===== НОВАЯ ИНТЕРАКТИВНОСТЬ ===== */
+document.querySelectorAll(".rabbit").forEach((rabbit,index)=>{
+  rabbit.addEventListener("click",()=>{
+    if(rabbit.classList.contains("jump-left")||rabbit.classList.contains("jump-right"))return;
+    rabbit.classList.add(index===0?"jump-left":"jump-right");
+    setTimeout(()=>{
+      rabbit.classList.remove("jump-left","jump-right");
+    },5000);
+  });
+});
+
+const waterButton=document.getElementById("waterButton");
+const waterMachine=document.getElementById("waterMachine");
+const waterNote=document.getElementById("waterNote");
+waterButton.addEventListener("click",()=>{
+  const active=waterMachine.classList.toggle("on");
+  waterButton.textContent=active?"Выключить воду 💦":"Включить воду 💦";
+  waterNote.textContent=active?"Сифон поливает! 💦":"Система готова.";
+});
+
+/* Клик по фото — открыть крупно */
+const lightbox=document.getElementById("lightbox");
+const lightboxImg=document.getElementById("lightboxImg");
+function openPhoto(src){
+  lightboxImg.src=src;
+  lightbox.classList.add("open");
+  lightbox.setAttribute("aria-hidden","false");
+}
+document.querySelectorAll("[data-photo]").forEach(item=>{
+  item.addEventListener("click",()=>openPhoto(item.dataset.photo));
+});
+function closePhoto(){
+  lightbox.classList.remove("open");
+  lightbox.setAttribute("aria-hidden","true");
+  lightboxImg.src="";
+}
+document.getElementById("lightboxClose").addEventListener("click",closePhoto);
+lightbox.addEventListener("click",e=>{if(e.target===lightbox)closePhoto()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closePhoto()});
+
+/* Плавное появление архива */
+const reveal=document.querySelector(".reveal");
+if("IntersectionObserver" in window){
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  },{threshold:.12});
+  observer.observe(reveal);
+}else reveal.classList.add("visible");
+
 init();
 </script>
 </body>
