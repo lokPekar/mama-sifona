@@ -108,6 +108,41 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .gallery-item.wet,.main-photo-wrap.wet{position:relative}
 .gallery-item.wet::after,.main-photo-wrap.wet::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(to top,#8fd8f077,transparent 55%);pointer-events:none;animation:wetPulse 1.2s ease-in-out infinite alternate}
 @keyframes wetPulse{from{opacity:.55}to{opacity:.85}}
+.mute-button{margin-top:10px;width:auto;display:inline-block;padding:10px 16px;font-size:13px}
+
+/* ===== УТОЧКИ ===== */
+.duck{position:fixed;bottom:2px;font-size:26px;pointer-events:none;z-index:7;opacity:0;transition:opacity .6s ease;animation:duckBob 2.6s ease-in-out infinite}
+.duck.show{opacity:1}
+@keyframes duckBob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-6px) rotate(4deg)}}
+
+/* Кролики нервничают, когда вода поднимается высоко */
+.rabbit.alarmed{animation:rabbitAlarm .5s ease-in-out infinite alternate}
+@keyframes rabbitAlarm{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-10px) rotate(3deg)}}
+
+/* ===== ПОГЛАДИТЬ СИФОНА ===== */
+.pet-button{width:auto;display:inline-block;margin:10px auto 0;padding:10px 18px;font-size:13px;background:white;color:#c96f68;border:2px solid #efc5bd;box-shadow:none}
+.pet-hearts{position:relative;height:0}
+.pet-heart{position:absolute;font-size:18px;opacity:0;pointer-events:none;animation:heartFloat 1.1s ease-out forwards}
+@keyframes heartFloat{0%{opacity:1;transform:translate(0,0) scale(.6)}100%{opacity:0;transform:translate(var(--dx,0),-60px) scale(1.15)}}
+
+/* ===== ИГРА "ЛОВИ КАПЛИ" ===== */
+.drip-game{margin-top:16px;padding:14px;border:2px dashed #a8dcef;border-radius:20px;background:#f0fbff}
+.drip-game-title{font-weight:bold;font-size:14px;margin-bottom:8px;color:#3f7fa0}
+.drip-game-field{position:relative;height:110px;border-radius:14px;background:linear-gradient(#eaf8ff,#dcf1fb);overflow:hidden}
+.drip-game-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#7fa9bd;font-size:12px;text-align:center;padding:10px}
+.game-drop{position:absolute;top:-20px;font-size:20px;cursor:pointer;user-select:none;animation:gameDropFall linear forwards;filter:drop-shadow(0 2px 2px #0002)}
+@keyframes gameDropFall{to{transform:translateY(130px)}}
+.game-drop.caught{animation:none!important;pointer-events:none}
+@keyframes dropCaughtPop{0%{transform:scale(1);opacity:1}100%{transform:scale(1.8);opacity:0}}
+.game-drop.pop{animation:dropCaughtPop .3s ease-out forwards!important}
+.drip-score{margin-top:8px;text-align:center;font-size:12px;color:#7fa9bd}
+
+/* ===== БУТЫЛКА С ПОСЛАНИЕМ ===== */
+.message-bottle{position:fixed;bottom:6px;font-size:30px;z-index:7;opacity:0;pointer-events:none;transition:opacity .6s ease;animation:bottleBob 3.4s ease-in-out infinite;left:22%}
+.message-bottle.show{opacity:1;pointer-events:auto;cursor:pointer}
+@keyframes bottleBob{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-10px) rotate(8deg)}}
+.bottle-note{position:fixed;left:50%;bottom:70px;transform:translateX(-50%) translateY(10px);max-width:280px;padding:14px 16px;background:#fffaf6;border:2px dashed #dfa095;border-radius:16px;box-shadow:0 12px 30px #78463d33;font-size:14px;color:#7c554b;text-align:center;opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease;z-index:8}
+.bottle-note.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* ===== ГЛАВНОЕ ФОТО ===== */
 .main-photo-wrap{position:relative;width:100%;max-width:100%;overflow:hidden;border-radius:20px;background:#fff1eb;box-shadow:0 12px 30px #78463d17}
@@ -188,7 +223,12 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
 <div class="wind-overlay" id="windOverlay" aria-hidden="true">
   <div class="wind-line"></div><div class="wind-line"></div><div class="wind-line"></div><div class="wind-line"></div>
 </div>
-<div class="page-flood" id="pageFlood" aria-hidden="true"></div>
+<div class="page-flood" id="pageFlood" aria-hidden="true">
+  <div class="duck" id="duck1" style="left:12%">🦆</div>
+  <div class="duck" id="duck2" style="left:38%;animation-delay:.8s">🦆</div>
+  <div class="duck" id="duck3" style="left:64%;animation-delay:1.5s">🦆</div>
+  <div class="duck" id="duck4" style="left:85%;animation-delay:.4s">🦆</div>
+</div>
 
 <div class="page">
 <header>
@@ -244,12 +284,15 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
         <div class="photo-shine"></div>
       </div>
       <div class="photo-label">Сифон в пути 🚌</div>
+      <button class="pet-button" id="petButton" type="button">🤍 Погладить Сифона</button>
+      <div class="pet-hearts" id="petHearts" aria-hidden="true"></div>
     </div>
 
     <div class="water-card">
       <h3>💦 Сифон под раковиной</h3>
       <p>Нажми кнопку — вода реально «пойдёт» по кухонному сифону и польётся из сливной трубы.</p>
       <button class="siphon-button" id="waterButton" type="button">Пустить воду 💦</button>
+      <button class="secondary mute-button" id="muteButton" type="button" aria-pressed="false">🔊 Звук вкл</button>
 <div class="under-sink water-machine" id="waterMachine" aria-label="Анимация кухонного сифона">
         <div class="sink-counter"></div>
         <div class="sink-bowl"></div>
@@ -279,11 +322,24 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
       <div class="siphon-question" id="siphonQuestion">
         <div class="siphon-question-title">❓ Вопрос к Сифону</div>
-        <button class="question-button" id="siphonQuestionButton" type="button">Сифон, ты гетеросексуал?</button>
-        <div class="siphon-answer" id="siphonAnswer">Ваааась, нет конечно!</div>
+        <button class="question-button" id="siphonQuestionButton" type="button">Задать вопрос Сифону</button>
+        <div class="siphon-answer" id="siphonAnswer"></div>
+      </div>
+
+      <!-- Мини-игра: лови капли -->
+      <div class="drip-game" id="dripGame">
+        <div class="drip-game-title">🎯 Лови капли, пока льётся вода!</div>
+        <div class="drip-game-field" id="dripField">
+          <div class="drip-game-hint" id="dripHint">Включи воду и лови капли кликом 👆</div>
+        </div>
+        <div class="drip-score">Поймано: <b id="dripScore">0</b></div>
       </div>
     </div>
   </div>
+
+  <!-- Бутылка с посланием, плавающая в потопе -->
+  <div class="message-bottle" id="messageBottle" title="Выловить послание">🍾</div>
+  <div class="bottle-note" id="bottleNote"></div>
 
   <div class="gallery" id="gallery">
     <div class="gallery-item" data-photo="images/siphon-2.png">
@@ -419,6 +475,7 @@ document.querySelectorAll(".rabbit").forEach((rabbit,index)=>{
 });
 
 const waterButton=document.getElementById("waterButton");
+const muteButton=document.getElementById("muteButton");
 const waterMachine=document.getElementById("waterMachine");
 const waterNote=document.getElementById("waterNote");
 const bucketWater=document.getElementById("bucketWater");
@@ -427,12 +484,74 @@ const overflowStream=document.getElementById("overflowStream");
 const pageFlood=document.getElementById("pageFlood");
 const mainPhotoWrap=document.getElementById("mainPhotoWrap");
 const galleryEl=document.getElementById("gallery");
+const ducks=[document.getElementById("duck1"),document.getElementById("duck2"),document.getElementById("duck3"),document.getElementById("duck4")];
+
+/* ===== ЗВУК (WebAudio, без файлов) ===== */
+let audioCtx=null,soundOn=true;
+function ensureAudio(){
+  if(!audioCtx){
+    try{audioCtx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){audioCtx=null}
+  }
+  if(audioCtx&&audioCtx.state==="suspended")audioCtx.resume();
+  return audioCtx;
+}
+function playDrip(){
+  if(!soundOn)return;
+  const ctx=ensureAudio();if(!ctx)return;
+  const t=ctx.currentTime;
+  const osc=ctx.createOscillator();const gain=ctx.createGain();
+  osc.type="sine";
+  const freq=680+Math.random()*260;
+  osc.frequency.setValueAtTime(freq,t);
+  osc.frequency.exponentialRampToValueAtTime(freq*0.45,t+0.14);
+  gain.gain.setValueAtTime(0.0001,t);
+  gain.gain.exponentialRampToValueAtTime(0.09,t+0.012);
+  gain.gain.exponentialRampToValueAtTime(0.0001,t+0.16);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(t);osc.stop(t+0.18);
+}
+function playSplash(){
+  if(!soundOn)return;
+  const ctx=ensureAudio();if(!ctx)return;
+  const t=ctx.currentTime;
+  // низкий "буль" + шумовой всплеск
+  const osc=ctx.createOscillator();const gain=ctx.createGain();
+  osc.type="sine";
+  osc.frequency.setValueAtTime(220,t);
+  osc.frequency.exponentialRampToValueAtTime(70,t+0.32);
+  gain.gain.setValueAtTime(0.0001,t);
+  gain.gain.exponentialRampToValueAtTime(0.16,t+0.03);
+  gain.gain.exponentialRampToValueAtTime(0.0001,t+0.4);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(t);osc.stop(t+0.42);
+
+  const bufferSize=ctx.sampleRate*0.35;
+  const buffer=ctx.createBuffer(1,bufferSize,ctx.sampleRate);
+  const data=buffer.getChannelData(0);
+  for(let i=0;i<bufferSize;i++){
+    const decay=1-i/bufferSize;
+    data[i]=(Math.random()*2-1)*decay*decay*0.35;
+  }
+  const noise=ctx.createBufferSource();noise.buffer=buffer;
+  const noiseFilter=ctx.createBiquadFilter();noiseFilter.type="lowpass";noiseFilter.frequency.value=1800;
+  const noiseGain=ctx.createGain();noiseGain.gain.value=0.5;
+  noise.connect(noiseFilter).connect(noiseGain).connect(ctx.destination);
+  noise.start(t);
+}
+muteButton.addEventListener("click",()=>{
+  soundOn=!soundOn;
+  muteButton.textContent=soundOn?"🔊 Звук вкл":"🔇 Звук выкл";
+  muteButton.setAttribute("aria-pressed",String(!soundOn));
+  if(soundOn)ensureAudio();
+});
 
 const BUCKET_TOP=223,BUCKET_BOTTOM=191,BUCKET_MAX_H=BUCKET_TOP-BUCKET_BOTTOM; // ~32px внутри ведра
 let bucketLevel=0; // 0..1
 let overflowCount=0; // сколько раз перелилось — растим потоп
 let waterTimer=null,overflowTimer=null;
 const MAX_FLOOD_PX=520; // предел разлива по странице
+const DUCKS_APPEAR_AT_PX=90; // с какого уровня потопа появляются уточки
+const ALARM_AT_PX=260; // с какого уровня потопа кролики нервничают
 
 function setBucketLevel(v){
   bucketLevel=Math.max(0,Math.min(1,v));
@@ -460,12 +579,20 @@ function wetten(el){
   el.classList.add("wet");
 }
 
+function updateFloodExtras(floodH){
+  const showDucks=floodH>=DUCKS_APPEAR_AT_PX;
+  ducks.forEach(d=>{if(d)d.classList.toggle("show",showDucks)});
+  const alarmed=floodH>=ALARM_AT_PX;
+  document.querySelectorAll(".rabbit").forEach(r=>r.classList.toggle("alarmed",alarmed));
+}
+
 function doOverflow(){
   // струя перелива через край ведёрка коротко показывается
   overflowStream.style.opacity="1";
   overflowStream.setAttribute("height","30");
   overflowStream.setAttribute("y","188");
   setTimeout(()=>{overflowStream.setAttribute("height","0");overflowStream.style.opacity="0"},420);
+  playSplash();
 
   overflowCount++;
   waterNote.textContent="Ведёрко переполнилось! Вода льётся на фотографии 💦";
@@ -481,6 +608,8 @@ function doOverflow(){
   // поднимаем уровень воды на странице
   const floodH=Math.min(MAX_FLOOD_PX,overflowCount*26);
   pageFlood.style.height=floodH+"px";
+  updateFloodExtras(floodH);
+  maybeShowBottle(floodH);
 
   // сбрасываем ведёрко и наполняем заново
   setBucketLevel(0);
@@ -489,15 +618,19 @@ function doOverflow(){
 function tickFill(){
   if(!waterMachine.classList.contains("on"))return;
   setBucketLevel(bucketLevel+0.11);
+  playDrip();
   if(bucketLevel>=1)doOverflow();
 }
 
 function startWater(){
   setBucketLevel(0);
+  ensureAudio();
   waterTimer=setInterval(tickFill,380);
+  startDripGame();
 }
 function stopWater(){
   clearInterval(waterTimer);waterTimer=null;
+  stopDripGame();
 }
 
 waterButton.addEventListener("click",()=>{
@@ -505,6 +638,86 @@ waterButton.addEventListener("click",()=>{
   waterButton.textContent=active?"Перекрыть воду 🚰":"Пустить воду 💦";
   waterNote.textContent=active?"Вода пошла через сифон и наполняет ведёрко! 💦":"Система готова. Вода ждёт своего часа.";
   if(active)startWater();else stopWater();
+});
+
+/* ===== ИГРА "ЛОВИ КАПЛИ" ===== */
+const dripField=document.getElementById("dripField");
+const dripHint=document.getElementById("dripHint");
+const dripScoreEl=document.getElementById("dripScore");
+let dripScore=0,dripGameTimer=null;
+function startDripGame(){
+  if(dripHint)dripHint.style.display="none";
+  clearInterval(dripGameTimer);
+  dripGameTimer=setInterval(spawnGameDrop,900);
+}
+function stopDripGame(){
+  clearInterval(dripGameTimer);dripGameTimer=null;
+  if(dripHint&&dripField&&dripField.querySelectorAll(".game-drop").length===0)dripHint.style.display="flex";
+}
+function spawnGameDrop(){
+  if(!dripField)return;
+  const fieldWidth=dripField.clientWidth;
+  const drop=document.createElement("div");
+  drop.className="game-drop";
+  drop.textContent="💧";
+  const x=10+Math.random()*(fieldWidth-30);
+  drop.style.left=x+"px";
+  const duration=1.6+Math.random()*0.7;
+  drop.style.animationDuration=duration+"s";
+  drop.addEventListener("click",()=>{
+    if(drop.classList.contains("caught"))return;
+    drop.classList.add("caught","pop");
+    dripScore++;
+    dripScoreEl.textContent=dripScore;
+    playDrip();
+    setTimeout(()=>drop.remove(),320);
+  });
+  drop.addEventListener("animationend",()=>{
+    if(!drop.classList.contains("caught"))drop.remove();
+  });
+  dripField.appendChild(drop);
+}
+
+/* ===== ПОГЛАДИТЬ СИФОНА ===== */
+const petButton=document.getElementById("petButton");
+const petHearts=document.getElementById("petHearts");
+const petPhrases=["Сифону приятно 🥹","Мурр... то есть, гав 🐾","Сифон доволен собой 😌","Ещё разок? 🤍","Сифон жмурится от счастья"];
+petButton.addEventListener("click",()=>{
+  petButton.textContent=petPhrases[Math.floor(Math.random()*petPhrases.length)];
+  for(let i=0;i<4;i++){
+    const heart=document.createElement("span");
+    heart.className="pet-heart";
+    heart.textContent=["💗","🤍","✨"][Math.floor(Math.random()*3)];
+    heart.style.left=(45+Math.random()*10)+"%";
+    heart.style.setProperty("--dx",(Math.random()*40-20)+"px");
+    petHearts.appendChild(heart);
+    setTimeout(()=>heart.remove(),1150);
+  }
+  setTimeout(()=>{petButton.textContent="🤍 Погладить Сифона"},1800);
+});
+
+/* ===== БУТЫЛКА С ПОСЛАНИЕМ (появляется в потопе) ===== */
+const messageBottle=document.getElementById("messageBottle");
+const bottleNote=document.getElementById("bottleNote");
+const bottleMessages=[
+  "«Однажды я допью весь чай в общаге» — Сифон",
+  "«Очередь ко мне длиннее, чем моя терпимость к холодной воде» — Сифон",
+  "«Я не тону, я просто отдыхаю на дне» — Сифон",
+  "«Каждая капля этой воды — метафора моей занятости» — Сифон",
+  "«Если найдёшь эту бутылку — ты официально в топе очереди» — Сифон",
+  "«Сифон был здесь. Вода тоже» — Сифон"
+];
+let bottleShown=false;
+function maybeShowBottle(floodH){
+  if(bottleShown||floodH<150)return;
+  bottleShown=true;
+  messageBottle.style.left=(15+Math.random()*60)+"%";
+  messageBottle.classList.add("show");
+}
+messageBottle.addEventListener("click",()=>{
+  bottleNote.textContent=bottleMessages[Math.floor(Math.random()*bottleMessages.length)];
+  bottleNote.classList.add("show");
+  setTimeout(()=>bottleNote.classList.remove("show"),3200);
 });
 
 /* Сифон говорит — по странице проходит сквозняк */
@@ -526,11 +739,20 @@ speakButton.addEventListener("click",()=>{
 
 const siphonQuestionButton=document.getElementById("siphonQuestionButton");
 const siphonAnswer=document.getElementById("siphonAnswer");
+const siphonQA=[
+  ["Сифон, ты гетеросексуал?","Ваааась, нет конечно!"],
+  ["Сифон, любишь ли ты воду?","Только когда она чужая и льётся не на меня"],
+  ["Сифон, когда ты вернёшься?","Сифон уже почти доехал (наверное)"],
+  ["Сифон, кто твой любимый кролик?","Оба, но тайно"],
+  ["Сифон, боишься ли ты потопа?","Только если он в моей комнате"]
+];
 siphonQuestionButton.addEventListener("click",()=>{
+  const [q,a]=siphonQA[Math.floor(Math.random()*siphonQA.length)];
+  siphonQuestionButton.textContent=q;
+  siphonAnswer.textContent=a;
   siphonAnswer.classList.remove("show");
   void siphonAnswer.offsetWidth;
   siphonAnswer.classList.add("show");
-  siphonQuestionButton.textContent="Задать вопрос ещё раз?";
 });
 
 /* Клик по фото — открыть крупно */
