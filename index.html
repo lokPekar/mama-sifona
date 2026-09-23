@@ -41,7 +41,7 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .count{margin-top:15px;text-align:center;font-size:13px;color:#a98177}
 
 /* ===== КРОЛИКИ ===== */
-.rabbit-stage{height:82px;position:relative;z-index:4;margin:0 18px -26px;pointer-events:none}
+.rabbit-stage{height:82px;position:relative;z-index:4;margin:0 18px -26px;pointer-events:none;overflow:visible}
 .rabbit{position:absolute;bottom:1px;font-size:48px;line-height:1;cursor:pointer;pointer-events:auto;filter:drop-shadow(0 5px 4px rgba(90,48,38,.18));user-select:none;z-index:3;transition:transform .2s}
 .rabbit.left{left:14%}.rabbit.right{right:14%}
 .rabbit:hover{transform:translateY(-8px) rotate(-5deg)}
@@ -51,13 +51,13 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
 0%{transform:translate(0,0) rotate(0) scale(1);opacity:1}
 18%{transform:translate(18px,-42px) rotate(-10deg) scale(1.08);opacity:1}
 48%{transform:translate(70px,-72px) rotate(16deg) scale(1.02);opacity:1}
-100%{transform:translate(135px,125px) rotate(34deg) scale(.7);opacity:0}
+100%{transform:translate(105px,-18px) rotate(34deg) scale(.72);opacity:0}
 }
 @keyframes rabbitJumpRight{
 0%{transform:translate(0,0) rotate(0) scale(1);opacity:1}
 18%{transform:translate(-18px,-42px) rotate(10deg) scale(1.08);opacity:1}
 48%{transform:translate(-70px,-72px) rotate(-16deg) scale(1.02);opacity:1}
-100%{transform:translate(-135px,125px) rotate(-34deg) scale(.7);opacity:0}
+100%{transform:translate(-105px,-18px) rotate(-34deg) scale(.72);opacity:0}
 }
 .rabbit.returning{animation:rabbitReturn .65s ease-out forwards}
 @keyframes rabbitReturn{0%{transform:translateY(35px) scale(.55);opacity:0}65%{transform:translateY(-9px) scale(1.08);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}
@@ -365,11 +365,8 @@ document.querySelectorAll(".rabbit").forEach((rabbit,index)=>{
   rabbit.addEventListener("click",()=>{
     if(rabbit.classList.contains("jump-left")||rabbit.classList.contains("jump-right")||rabbit.classList.contains("returning"))return;
     rabbit.classList.add(index===0?"jump-left":"jump-right");
-    // После верхней части прыжка кролик оказывается визуально за окнами/панелями.
-    setTimeout(()=>{ rabbit.parentElement.style.zIndex="1"; },330);
     setTimeout(()=>{
       rabbit.classList.remove("jump-left","jump-right");
-      rabbit.parentElement.style.zIndex="4";
       rabbit.style.zIndex="3";
       rabbit.classList.add("returning");
       setTimeout(()=>rabbit.classList.remove("returning"),700);
