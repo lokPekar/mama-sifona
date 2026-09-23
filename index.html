@@ -154,6 +154,14 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
 /* Появление блока при прокрутке */
 .reveal{opacity:0;transform:translateY(25px);transition:opacity .7s ease,transform .7s ease}
 .reveal.visible{opacity:1;transform:none}
+
+/* Вопрос к Сифону */
+.siphon-question{margin-top:14px;padding:16px;border:2px dashed #e9b9ae;border-radius:20px;background:#fff8f4;position:relative;overflow:hidden}
+.siphon-question-title{font-weight:bold;font-size:15px;margin-bottom:10px}
+.question-button{margin-top:0;padding:12px;font-size:14px;background:#fff;color:#c96f68;border:2px solid #efc5bd;box-shadow:none}
+.siphon-answer{display:none;margin-top:12px;padding:13px 15px;border-radius:16px;background:#ffe3df;color:#9b554d;font-size:18px;font-weight:bold;text-align:center;animation:answerPop .45s ease both}
+.siphon-answer.show{display:block}
+@keyframes answerPop{0%{opacity:0;transform:scale(.75) rotate(-2deg)}70%{transform:scale(1.06) rotate(1deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
 </style>
 </head>
 <body>
@@ -235,6 +243,12 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
       </div>
       <div class="water-note" id="waterNote">Система готова. Вода ждёт своего часа.</div>
       <button class="secondary speak-button" id="siphonSpeakButton" type="button">🗣️ Сифон говорит</button>
+
+      <div class="siphon-question" id="siphonQuestion">
+        <div class="siphon-question-title">❓ Вопрос к Сифону</div>
+        <button class="question-button" id="siphonQuestionButton" type="button">Сифон, ты гетеросексуал?</button>
+        <div class="siphon-answer" id="siphonAnswer">Ваааась, нет конечно!</div>
+      </div>
     </div>
   </div>
 
@@ -386,6 +400,16 @@ speakButton.addEventListener("click",()=>{
       speakButton.textContent="🗣️ Сифон говорит";
     },4200);
   }
+});
+
+
+const siphonQuestionButton=document.getElementById("siphonQuestionButton");
+const siphonAnswer=document.getElementById("siphonAnswer");
+siphonQuestionButton.addEventListener("click",()=>{
+  siphonAnswer.classList.remove("show");
+  void siphonAnswer.offsetWidth;
+  siphonAnswer.classList.add("show");
+  siphonQuestionButton.textContent="Задать вопрос ещё раз?";
 });
 
 /* Клик по фото — открыть крупно */
