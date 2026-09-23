@@ -90,6 +90,24 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
 @keyframes pourWater{from{transform:scaleY(.55)}to{transform:scaleY(1.1)}}
 @keyframes splashRing{to{transform:scale(1);opacity:.55}}
 .water-note{font-size:13px;color:#a98177;margin-top:5px}
+.bucket-water{transition:height .4s linear,y .4s linear}
+.overflow-stream{transition:height .25s linear}
+.bucket-level-wrap{width:120px;margin:8px auto 0}
+.bucket-level-bar{height:8px;border-radius:8px;background:#f0e2d8;overflow:hidden;box-shadow:inset 0 1px 3px #0002}
+.bucket-level-fill{height:100%;width:0%;border-radius:8px;background:linear-gradient(90deg,#7fd4f2,#3db4ea);transition:width .4s linear}
+
+/* ===== РАЗЛИВ ВОДЫ ПО СТРАНИЦЕ ===== */
+.page-flood{position:fixed;left:0;right:0;bottom:0;height:0;pointer-events:none;z-index:6;background:linear-gradient(to top,#8fd8f0cc,#c9ecf9aa 70%,transparent);transition:height 1.4s cubic-bezier(.3,.9,.3,1);overflow:hidden}
+.page-flood::before{content:"";position:absolute;top:0;left:0;right:0;height:9px;background:repeating-linear-gradient(90deg,#eaf9ff 0 22px,#bfe9f7 22px 44px);opacity:.8;animation:floodShimmer 2.4s linear infinite}
+@keyframes floodShimmer{from{transform:translateX(0)}to{transform:translateX(-44px)}}
+.puddle{position:absolute;bottom:-10px;border-radius:50%;background:radial-gradient(ellipse at center,#bfe9f7cc,#8fd8f066 60%,transparent 75%);opacity:0;transform:scale(.3);transition:opacity .5s ease,transform .6s cubic-bezier(.2,.9,.3,1.2);pointer-events:none;z-index:5}
+.puddle.show{opacity:1;transform:scale(1)}
+.splash-drop{position:absolute;width:5px;height:14px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#5ab8e6;opacity:0;pointer-events:none;z-index:5}
+.splash-drop.fall{animation:dropFall .9s ease-in forwards}
+@keyframes dropFall{0%{opacity:1;transform:translateY(-40px) scale(1)}85%{opacity:1}100%{opacity:0;transform:translateY(0) scale(.6)}}
+.gallery-item.wet,.main-photo-wrap.wet{position:relative}
+.gallery-item.wet::after,.main-photo-wrap.wet::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(to top,#8fd8f077,transparent 55%);pointer-events:none;animation:wetPulse 1.2s ease-in-out infinite alternate}
+@keyframes wetPulse{from{opacity:.55}to{opacity:.85}}
 
 /* ===== ГЛАВНОЕ ФОТО ===== */
 .main-photo-wrap{position:relative;width:100%;max-width:100%;overflow:hidden;border-radius:20px;background:#fff1eb;box-shadow:0 12px 30px #78463d17}
@@ -170,6 +188,7 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
 <div class="wind-overlay" id="windOverlay" aria-hidden="true">
   <div class="wind-line"></div><div class="wind-line"></div><div class="wind-line"></div><div class="wind-line"></div>
 </div>
+<div class="page-flood" id="pageFlood" aria-hidden="true"></div>
 
 <div class="page">
 <header>
@@ -220,7 +239,7 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
   <div class="siphon-feature">
     <div class="siphon-card">
-      <div class="main-photo-wrap" data-photo="images/siphon-1.jpg">
+      <div class="main-photo-wrap" id="mainPhotoWrap" data-photo="images/siphon-1.jpg">
         <img class="main-photo" src="images/siphon-1.jpg" alt="Сифон" loading="lazy">
         <div class="photo-shine"></div>
       </div>
@@ -241,12 +260,21 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
           <path class="pipe-flow" d="M100 76V112A35 35 0 0 0 170 112V108Q170 100 178 100H236" fill="none" stroke="#3db4ea" stroke-width="6" stroke-linecap="round"/>
           <rect x="234" y="93" width="8" height="14" rx="3" fill="#929a9e"/>
           <rect class="fall" x="231" y="107" width="10" height="85" rx="5" fill="url(#wg)"/>
+
+          <!-- Ёмкость (ведёрко) под трубой -->
           <path d="M205 190V212Q205 226 219 226H254Q268 226 268 212V190" fill="#fff2e5" fill-opacity=".75" stroke="#c79c7d" stroke-width="5" stroke-linejoin="round"/>
+          <clipPath id="bucketClip"><path d="M208 191H265V212Q265 223 254 223H219Q208 223 208 212Z"/></clipPath>
+          <rect id="bucketWater" class="bucket-water" x="208" y="223" width="57" height="0" fill="url(#wg)" clip-path="url(#bucketClip)"/>
+
           <ellipse class="ring" cx="236" cy="192" rx="24" ry="7" fill="none" stroke="#66c5ed" stroke-width="4"/>
           <text x="135" y="172" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="2" fill="#8e7770" transform="rotate(-5 135 172)">СИФОН</text>
+
+          <!-- Струя перелива через край ведёрка -->
+          <rect id="overflowStream" class="overflow-stream" x="255" y="188" width="7" height="0" rx="3" fill="url(#wg)" opacity="0"/>
         </svg>
       </div>
       <div class="water-note" id="waterNote">Система готова. Вода ждёт своего часа.</div>
+      <div class="bucket-level-wrap" aria-hidden="true"><div class="bucket-level-bar"><div class="bucket-level-fill" id="bucketLevelFill"></div></div></div>
       <button class="secondary speak-button" id="siphonSpeakButton" type="button">🗣️ Сифон говорит</button>
 
       <div class="siphon-question" id="siphonQuestion">
@@ -257,7 +285,7 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
     </div>
   </div>
 
-  <div class="gallery">
+  <div class="gallery" id="gallery">
     <div class="gallery-item" data-photo="images/siphon-2.png">
       <img src="images/siphon-2.png" alt="Сифон — SWAG" loading="lazy">
       <div class="gallery-caption">SWAG 100% 😎</div>
@@ -275,11 +303,11 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
       <div class="gallery-caption">Фирменный образ</div>
     </div>
     <div class="gallery-item" data-photo="images/siphon-6.jpg">
-      <img src="images/siphon-7.jpg" alt="Сифон с братом" loading="lazy">
+      <img src="images/siphon-6.jpg" alt="Сифон с братом" loading="lazy">
       <div class="gallery-caption">С братаном 🤝</div>
     </div>
     <div class="gallery-item" data-photo="images/siphon-7.jpg">
-      <img src="images/siphon-6.jpg" alt="Сифон — крупный план" loading="lazy">
+      <img src="images/siphon-7.jpg" alt="Сифон — крупный план" loading="lazy">
       <div class="gallery-caption">Редкий крупный план</div>
     </div>
   </div>
@@ -393,10 +421,90 @@ document.querySelectorAll(".rabbit").forEach((rabbit,index)=>{
 const waterButton=document.getElementById("waterButton");
 const waterMachine=document.getElementById("waterMachine");
 const waterNote=document.getElementById("waterNote");
+const bucketWater=document.getElementById("bucketWater");
+const bucketLevelFill=document.getElementById("bucketLevelFill");
+const overflowStream=document.getElementById("overflowStream");
+const pageFlood=document.getElementById("pageFlood");
+const mainPhotoWrap=document.getElementById("mainPhotoWrap");
+const galleryEl=document.getElementById("gallery");
+
+const BUCKET_TOP=223,BUCKET_BOTTOM=191,BUCKET_MAX_H=BUCKET_TOP-BUCKET_BOTTOM; // ~32px внутри ведра
+let bucketLevel=0; // 0..1
+let overflowCount=0; // сколько раз перелилось — растим потоп
+let waterTimer=null,overflowTimer=null;
+const MAX_FLOOD_PX=520; // предел разлива по странице
+
+function setBucketLevel(v){
+  bucketLevel=Math.max(0,Math.min(1,v));
+  const h=BUCKET_MAX_H*bucketLevel;
+  bucketWater.setAttribute("height",h);
+  bucketWater.setAttribute("y",BUCKET_TOP-h);
+  bucketLevelFill.style.width=(bucketLevel*100)+"%";
+}
+
+function spawnDrop(container){
+  if(!container)return;
+  const rect=container.getBoundingClientRect();
+  const drop=document.createElement("div");
+  drop.className="splash-drop fall";
+  const x=8+Math.random()*(rect.width-16);
+  drop.style.left=x+"px";
+  drop.style.top="0px";
+  container.style.position=container.style.position||"relative";
+  container.appendChild(drop);
+  setTimeout(()=>drop.remove(),950);
+}
+
+function wetten(el){
+  if(!el)return;
+  el.classList.add("wet");
+}
+
+function doOverflow(){
+  // струя перелива через край ведёрка коротко показывается
+  overflowStream.style.opacity="1";
+  overflowStream.setAttribute("height","30");
+  overflowStream.setAttribute("y","188");
+  setTimeout(()=>{overflowStream.setAttribute("height","0");overflowStream.style.opacity="0"},420);
+
+  overflowCount++;
+  waterNote.textContent="Ведёрко переполнилось! Вода льётся на фотографии 💦";
+
+  // намокание главного фото и нескольких карточек галереи
+  wetten(mainPhotoWrap);
+  spawnDrop(mainPhotoWrap);
+  const items=galleryEl?Array.from(galleryEl.children):[];
+  const wetCount=Math.min(items.length,2+Math.floor(Math.random()*3));
+  const shuffled=items.slice().sort(()=>Math.random()-.5).slice(0,wetCount);
+  shuffled.forEach(item=>{wetten(item);spawnDrop(item);});
+
+  // поднимаем уровень воды на странице
+  const floodH=Math.min(MAX_FLOOD_PX,overflowCount*26);
+  pageFlood.style.height=floodH+"px";
+
+  // сбрасываем ведёрко и наполняем заново
+  setBucketLevel(0);
+}
+
+function tickFill(){
+  if(!waterMachine.classList.contains("on"))return;
+  setBucketLevel(bucketLevel+0.11);
+  if(bucketLevel>=1)doOverflow();
+}
+
+function startWater(){
+  setBucketLevel(0);
+  waterTimer=setInterval(tickFill,380);
+}
+function stopWater(){
+  clearInterval(waterTimer);waterTimer=null;
+}
+
 waterButton.addEventListener("click",()=>{
   const active=waterMachine.classList.toggle("on");
   waterButton.textContent=active?"Перекрыть воду 🚰":"Пустить воду 💦";
-  waterNote.textContent=active?"Вода пошла через сифон и льётся в ведро! 💦":"Система готова. Вода ждёт своего часа.";
+  waterNote.textContent=active?"Вода пошла через сифон и наполняет ведёрко! 💦":"Система готова. Вода ждёт своего часа.";
+  if(active)startWater();else stopWater();
 });
 
 /* Сифон говорит — по странице проходит сквозняк */
